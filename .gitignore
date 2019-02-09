@@ -1,0 +1,7 @@
+/api
+/database/*/data
+/database/*/*sql
+/database/secrets
+compose-test-down.sh
+compose-test-up.sh
+postgres-deployment.bak.yaml

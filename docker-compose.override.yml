@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+
+  node:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=instagram_dev
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+    depends_on:
+      - postgres
+
+  postgres:
+    image: hanchiang/instagram-node-api-database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/postgres:/docker-entrypoint-initdb.d
+      - ./database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=instagram_dev
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3

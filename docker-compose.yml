@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  node:
+    ports:
+      - "80:3000"
+      - "9229:9229"
+      - "9230:9230"
+    volumes:
+      - ./api:/home/node/app
+      - ./api/package.json:/home/node/app/package.json
+      - ./api/package-lock.json:/home/node/app/package-lock.json
+      - notused:/home/node/app/node_modules
+    healthcheck:
+      disable: true
+
+volumes:
+  notused:
