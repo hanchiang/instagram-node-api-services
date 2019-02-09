@@ -20,7 +20,7 @@ services:
       - postgres
 
   postgres:
-    image: hanchiang/instagram-node-api-database
+    image: hanchiang/instagram-node-api-postgres
     ports:
       - "5432:5432"
     volumes:
