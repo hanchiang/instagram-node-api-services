@@ -5,3 +5,9 @@
 compose-test-down.sh
 compose-test-up.sh
 postgres-deployment.bak.yaml
+custom-ingress.yaml
+alias.sh
+default-backend.yaml
+mandatory.yaml
+*service*yaml
+*deployment*yaml

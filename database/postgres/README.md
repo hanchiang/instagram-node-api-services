@@ -1,4 +1,4 @@
-## postgresql_test folder
+## postgres_test folder
 This folder is mounted as a volume to the postgres container
 
 ### Data folder
