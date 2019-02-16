@@ -1,4 +1,6 @@
 /api
+/frontend
+
 /database/*/data
 /database/*/*sql
 /database/secrets

@@ -3,10 +3,14 @@ version: '3.1'
 services:
 
   node:
+    container_name: node
     ports:
       - "80:3000"
       - "9229:9229"
       - "9230:9230"
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     volumes:
       - ./api:/home/node/app
       - ./api/package.json:/home/node/app/package.json
@@ -14,6 +18,28 @@ services:
       - notused:/home/node/app/node_modules
     healthcheck:
       disable: true
+  
+  react:
+    container_name: react
+    ports:
+      - "8080:8080"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/home/node/app
+      - ./frontend/package.json:/home/node/app/package.json
+      - ./frontend/package-lock.json:/home/node/app/package-lock.json
+      - react-notused:/home/node/app/node_modules
+    healthcheck:
+      disable: true
+  
+  postgres:
+    container_name: postgres
+    image: hanchiang/instagram-node-api-postgres
+    ports:
+      - "5432:5432"
 
 volumes:
   notused:
+  react-notused:

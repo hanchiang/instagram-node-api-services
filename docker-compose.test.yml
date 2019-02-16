@@ -4,25 +4,26 @@ services:
 
   node:
     build:
-      context: ./api
-      dockerfile: Dockerfile
       args:
         - NODE_ENV=test
-    command: npm run dev
     environment:
       - NODE_ENV=test
       - POSTGRES_USER=postgres
       - POSTGRES_DB=instagram_test
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_PORT=5432
-      - POSTGRES_HOST=postgrestest
+      - POSTGRES_HOST=postgres
     depends_on:
-      - postgrestest
+      - postgres
+
+  react:
+    build:
+      args:
+        - NODE_ENV=test
+    depends_on:
+      - node
   
-  postgrestest:
-    image: hanchiang/instagram-node-api-postgres
-    ports:
-      - "5432:5432"
+  postgres:
     volumes:
       - ./database/postgres_test:/docker-entrypoint-initdb.d
       - ./database/postgres_test/data:/var/lib/postgresql/data
@@ -32,6 +33,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 3
