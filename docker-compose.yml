@@ -1,28 +1,29 @@
-version: '3.1'
+version: "3.1"
 
 services:
-
-  node:
-    container_name: node
+  backend:
+    container_name: backend
     ports:
-      - "80:3000"
+      - "3000:3000"
       - "9229:9229"
       - "9230:9230"
     build:
-      context: ./api
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./api:/home/node/app
-      - ./api/package.json:/home/node/app/package.json
-      - ./api/package-lock.json:/home/node/app/package-lock.json
-      - notused:/home/node/app/node_modules
+      - ./backend:/home/node/app
+      - ./backend/package.json:/home/node/app/package.json
+      - ./backend/package-lock.json:/home/node/app/package-lock.json
+      - /home/node/app/node_modules
     healthcheck:
       disable: true
-  
-  react:
-    container_name: react
+    depends_on:
+      - postgres
+
+  frontend:
+    container_name: frontend
     ports:
-      - "8080:8080"
+      - "80:8080"
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -30,16 +31,22 @@ services:
       - ./frontend:/home/node/app
       - ./frontend/package.json:/home/node/app/package.json
       - ./frontend/package-lock.json:/home/node/app/package-lock.json
-      - react-notused:/home/node/app/node_modules
+      - /home/node/app/node_modules
     healthcheck:
       disable: true
-  
+    depends_on:
+      - backend
+
   postgres:
     container_name: postgres
-    image: hanchiang/instagram-node-api-postgres
+    image: postgres:12.3
     ports:
       - "5432:5432"
-
-volumes:
-  notused:
-  react-notused:
+    volumes:
+      - ./database/postgres:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

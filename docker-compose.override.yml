@@ -1,8 +1,7 @@
-version: '3.1'
+version: "3.1"
 
 services:
-
-  node:
+  backend:
     build:
       args:
         - NODE_ENV=development
@@ -13,26 +12,17 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_HOST=postgres
-    depends_on:
-      - postgres
-    
-  react:
+
+  frontend:
     build:
       args:
         - NODE_ENV=development
-    depends_on:
-      - node
 
   postgres:
-    volumes:
-      - ./database/postgres:/docker-entrypoint-initdb.d
-      - ./database/postgres/data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=instagram_dev
       - POSTGRES_PASSWORD=postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+
+volumes:
+  pgdata:
