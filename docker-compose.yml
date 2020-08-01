@@ -18,7 +18,7 @@ services:
     healthcheck:
       disable: true
     depends_on:
-      - postgres
+      - mysql
 
   frontend:
     container_name: frontend
@@ -37,16 +37,19 @@ services:
     depends_on:
       - backend
 
-  postgres:
-    container_name: postgres
-    image: postgres:12.3
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - ./database/postgres:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/data
+      - ./backend/db/init:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15s
       timeout: 5s
       retries: 3
+
+volumes:
+  mysql-data:
