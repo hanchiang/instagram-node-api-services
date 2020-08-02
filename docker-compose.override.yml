@@ -9,7 +9,7 @@ services:
       - NODE_ENV=development
       - DB_NAME=instagram_dev
       - DB_USER=mysql
-      - DB_PASSWORD=myqsl
+      - DB_PASSWORD=mysql
       - DB_HOST=mysql
 
   frontend:
