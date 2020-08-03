@@ -43,7 +43,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./backend/db/init:/docker-entrypoint-initdb.d
+      - ./backend/src/db/init:/docker-entrypoint-initdb.d
       - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
